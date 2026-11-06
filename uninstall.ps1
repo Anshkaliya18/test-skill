@@ -1,4 +1,4 @@
-﻿$TargetDir = "C:\Users\anshk\.claude\commands"
+﻿$TargetDir = "$env:USERPROFILE\.claude\commands"
 
 Write-Host "Uninstalling Claude Code resume commands from $TargetDir..."
 
