@@ -2,7 +2,7 @@
 set -e
 
 TARGET_DIR="$HOME/.claude/commands"
-REPO_BASE="https://raw.githubusercontent.com/AnshKaliya18/test-skill/main/install.sh"
+REPO_BASE="https://raw.githubusercontent.com/AnshKaliya18/test-skill/main/commands"
 
 echo "Installing Claude Code resume commands to $TARGET_DIR..."
 mkdir -p "$TARGET_DIR"

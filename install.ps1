@@ -1,5 +1,5 @@
 $TargetDir = "$env:USERPROFILE\.claude\commands"
-$RepoBase = "https://raw.githubusercontent.com/AnshKaliya18/test-skill/main/install.ps1"
+$RepoBase = "https://raw.githubusercontent.com/AnshKaliya18/test-skill/main/commands"
 
 Write-Host "Installing Claude Code resume commands to $TargetDir..."
 New-Item -ItemType Directory -Force -Path $TargetDir | Out-Null
