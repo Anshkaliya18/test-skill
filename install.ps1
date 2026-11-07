@@ -1,4 +1,4 @@
-﻿$TargetDir = "$env:USERPROFILE\.claude\skills"
+$TargetDir = "$env:USERPROFILE\.claude\skills"
 $RepoBase = "https://raw.githubusercontent.com/AnshKaliya18/test-skill/main/skills"
 
 Write-Host "Installing Claude Code resume skills to $TargetDir..."
@@ -10,7 +10,7 @@ New-Item -ItemType Directory -Force -Path $TargetDir | Out-Null
   $url = "$RepoBase/$_/SKILL.md"
   $out = Join-Path $skillDir "SKILL.md"
   try {
-    Invoke-WebRequest -Uri $url -OutFile $out -ErrorAction Stop
+    Invoke-WebRequest -Uri $url -OutFile $out -UseBasicParsing -ErrorAction Stop
     Write-Host "  - Installed $_"
   } catch {
     Write-Error "Failed to install $_ from $url. $($_.Exception.Message)"

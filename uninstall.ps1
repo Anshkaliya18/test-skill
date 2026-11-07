@@ -1,4 +1,4 @@
-﻿$TargetDir = "$env:USERPROFILE\.claude\skills"
+$TargetDir = "$env:USERPROFILE\.claude\skills"
 
 Write-Host "Uninstalling Claude Code resume skills from $TargetDir..."
 
