@@ -1,14 +1,16 @@
-$TargetDir = "$env:USERPROFILE\.claude\commands"
-$RepoBase = "https://raw.githubusercontent.com/AnshKaliya18/test-skill/main/commands"
+$TargetDir = "$env:USERPROFILE\.claude\skills"
+$RepoBase = "https://raw.githubusercontent.com/AnshKaliya18/test-skill/main/skills"
 
-Write-Host "Installing Claude Code resume commands to $TargetDir..."
+Write-Host "Installing Claude Code resume skills to $TargetDir..."
 New-Item -ItemType Directory -Force -Path $TargetDir | Out-Null
 
-@("resume-make.md", "resume-update.md", "resume-suggest.md") | ForEach-Object {
-  $url = "$RepoBase/$_"
-  $out = Join-Path $TargetDir $_
+@("resume-make", "resume-update", "resume-suggest") | ForEach-Object {
+  $skillDir = Join-Path $TargetDir $_
+  New-Item -ItemType Directory -Force -Path $skillDir | Out-Null
+  $url = "$RepoBase/$_/SKILL.md"
+  $out = Join-Path $skillDir "SKILL.md"
   Invoke-WebRequest -Uri $url -OutFile $out
   Write-Host "  - Installed $_"
 }
 
-Write-Host "Done! You can now use /resume-make, /resume-update, and /resume-suggest in Claude Code."
+Write-Host "Done! Resume skills installed globally. Use them in Claude Code (e.g. ask to use resume-make skill)."
