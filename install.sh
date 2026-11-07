@@ -1,16 +1,19 @@
-#!/usr/bin/env bash
-set -e
+﻿#!/usr/bin/env bash
+set -euo pipefail
 
-TARGET_DIR="$HOME/.claude/skills"
+TARGET_DIR="C:\Users\anshk/.claude/skills"
 REPO_BASE="https://raw.githubusercontent.com/AnshKaliya18/test-skill/main/skills"
 
-echo "Installing Claude Code resume skills to $TARGET_DIR..."
-mkdir -p "$TARGET_DIR"
+echo "Installing Claude Code resume skills to ..."
+mkdir -p ""
 
 for skill in resume-make resume-update resume-suggest; do
-  mkdir -p "$TARGET_DIR/$skill"
-  curl -fsSL "$REPO_BASE/$skill/SKILL.md" -o "$TARGET_DIR/$skill/SKILL.md"
-  echo "  - Installed $skill"
+  mkdir -p "/"
+  if ! curl -fsSL "//SKILL.md" -o "//SKILL.md"; then
+    echo "Failed to install  from //SKILL.md" >&2
+    exit 1
+  fi
+  echo "  - Installed "
 done
 
-echo "Done! Resume skills installed globally. Use them in Claude Code (e.g. ask to use resume-make skill)."
+echo "Done! Resume skills installed globally."
