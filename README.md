@@ -1,107 +1,83 @@
-# Claude Resume Skills (Test)
+﻿# Resume Skills (Universal Installer)
 
-Beginner-friendly resume skills for Claude Code, packaged like small skills (HackathonOS-style structure, simplified). This repo is for learning how Claude skills work.
+Beginner-friendly resume skills for Claude Code and Codex/agents-style clients. Same SKILL.md files, installed to the right global skills directory.
 
 ## Skills
 
 | Skill | What it does |
 |---|---|
-| `resume-make` | Create a new `resume.md` from scratch |
-| `resume-update` | Update an existing `resume.md` |
-| `resume-suggest` | Suggest improvements for `resume.md` |
+| esume-make | Create a new esume.md from scratch |
+| esume-update | Update an existing esume.md |
+| esume-suggest | Suggest improvements for esume.md |
 
-## Install (one command, global)
+## Install (universal)
 
-Installs to Claude (`~/.claude/skills/`) and Codex/agents (`~/.agents/skills/`) by default.
+Installs to:
+- **Claude Code**: ~/.claude/skills/ (Windows: %USERPROFILE%\.claude\skills\)
+- **Codex/agents**: ~/.agents/skills/ (Windows: %USERPROFILE%\.agents\skills\)
 
-### Universal (recommended)
+Default target is ll (installs to both). Targets: claude, codex (or gents), ll.
 
-**Windows (PowerShell 5.1+)**
-```powershell
-iwr -UseBasicParsing https://raw.githubusercontent.com/AnshKaliya18/test-skill/main/install-universal.ps1 -OutFile $env:TEMP\resume-skills.ps1; & $env:TEMP\resume-skills.ps1 -Target all
-```
-
-**macOS / Linux**
-```bash
-curl -fsSL https://raw.githubusercontent.com/AnshKaliya18/test-skill/main/install-universal.sh | bash -s -- all
-```
-
-Targets: `claude`, `codex` (or `agents`), `all` (default).
-
-### Claude-only (legacy)
-- Windows: `iwr -UseBasicParsing https://raw.githubusercontent.com/AnshKaliya18/test-skill/main/install.ps1 -OutFile $env:TEMP\resume-skill-install.ps1; & $env:TEMP\resume-skill-install.ps1`
-- macOS/Linux: `curl -fsSL https://raw.githubusercontent.com/AnshKaliya18/test-skill/main/install.sh | bash`
-
-## Uninstall
-
-**Windows**
-```powershell
-iwr -UseBasicParsing https://raw.githubusercontent.com/AnshKaliya18/test-skill/main/uninstall-universal.ps1 -OutFile $env:TEMP\resume-skills-uninstall.ps1; & $env:TEMP\resume-skills-uninstall.ps1 -Target all
-```
-
-**macOS / Linux**
-```bash
-curl -fsSL https://raw.githubusercontent.com/AnshKaliya18/test-skill/main/uninstall-universal.sh | bash -s -- all
-```
-
-## Uninstall
+### Windows (PowerShell 5.1+)
+`powershell
+# Install to both
+iwr -UseBasicParsing https://raw.githubusercontent.com/AnshKaliya18/test-skill/main/install.ps1 -OutFile $env:TEMP\resume-skills.ps1; & $env:TEMP\resume-skills.ps1 -Target all
+`
+Examples:
+`powershell
+# Claude only
+& $env:TEMP\resume-skills.ps1 -Target claude
+# Codex/agents only
+& $env:TEMP\resume-skills.ps1 -Target codex
+`
 
 ### macOS / Linux
-```bash
-curl -fsSL https://raw.githubusercontent.com/AnshKaliya18/test-skill/main/uninstall.sh | bash
-```
+`ash
+# Install to both
+curl -fsSL https://raw.githubusercontent.com/AnshKaliya18/test-skill/main/install.sh | bash -s -- all
+`
+Examples:
+`ash
+curl -fsSL https://raw.githubusercontent.com/AnshKaliya18/test-skill/main/install.sh | bash -s -- claude
+curl -fsSL https://raw.githubusercontent.com/AnshKaliya18/test-skill/main/install.sh | bash -s -- codex
+`
 
-### Windows (PowerShell)
-```powershell
-irm https://raw.githubusercontent.com/AnshKaliya18/test-skill/main/uninstall.ps1 | iex
-```
+## Uninstall
+
+### Windows
+`powershell
+iwr -UseBasicParsing https://raw.githubusercontent.com/AnshKaliya18/test-skill/main/uninstall.ps1 -OutFile $env:TEMP\resume-skills-uninstall.ps1; & $env:TEMP\resume-skills-uninstall.ps1 -Target all
+`
+
+### macOS / Linux
+`ash
+curl -fsSL https://raw.githubusercontent.com/AnshKaliya18/test-skill/main/uninstall.sh | bash -s -- all
+`
 
 ## Usage
 
-After install, open Claude Code in any project and ask to use the skill, e.g.:
+After install, ask your agent to use the skill, e.g.:
 - "Use the resume-make skill to create my resume"
 - "Use resume-update skill to add my new job"
 - "Use resume-suggest skill to review my resume"
 
-(Invocation behavior depends on Claude Code version and `disable-model-invocation` in each `SKILL.md`.)
-
 ## Repo structure
 
-```text
+`	ext
 test-skill/
-├── skills/                 # distributable skills (what installers download)
+├── skills/                 # distributable skills (downloaded by installers)
 │   ├── resume-make/SKILL.md
 │   ├── resume-update/SKILL.md
 │   └── resume-suggest/SKILL.md
-├── .claude/skills/         # local project copy (for testing in this repo)
-├── commands/               # earlier slash-command experiment (optional)
+├── .claude/skills/         # local project copy (for testing)
+├── install.ps1             # universal installer (claude/codex/all)
 ├── install.sh
-├── install.ps1
-├── uninstall.sh
 ├── uninstall.ps1
+├── uninstall.sh
 └── README.md
-```
+`
 
-## Publish to GitHub (full steps)
-
-1. Ensure repo is public and on `main` branch:
-   ```bash
-   git branch --show-current   # should be main
-   ```
-2. Stage everything (skills + installers + README):
-   ```bash
-   git add skills/ install.sh install.ps1 uninstall.sh uninstall.ps1 README.md .claude/skills/
-   ```
-3. Commit:
-   ```bash
-   git commit -m "Publish resume skills with global installers"
-   ```
-4. Push:
-   ```bash
-   git push origin main
-   ```
-5. Verify raw URLs load (no 404):
-   - `https://raw.githubusercontent.com/AnshKaliya18/test-skill/main/install.ps1`
-   - `https://raw.githubusercontent.com/AnshKaliya18/test-skill/main/skills/resume-make/SKILL.md`
-
-After that, anyone can install globally with the one-liner above.
+## Notes
+- Windows scripts use -UseBasicParsing and are saved without BOM for PowerShell 5.1 compatibility.
+- If your Codex client uses a different skills path (e.g. ~/.codex/skills), change the target mapping in the scripts.
+- Repo: https://github.com/AnshKaliya18/test-skill
