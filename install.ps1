@@ -1,4 +1,4 @@
-$TargetDir = "$env:USERPROFILE\.claude\skills"
+$TargetDir = Join-Path $env:USERPROFILE ".claude\skills"
 $RepoBase = "https://raw.githubusercontent.com/AnshKaliya18/test-skill/main/skills"
 
 Write-Host "Installing Claude Code resume skills to $TargetDir..."

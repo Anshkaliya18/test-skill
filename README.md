@@ -19,10 +19,11 @@ Installs to `~/.claude/skills/` (or `%USERPROFILE%\.claude\skills\`) so Claude C
 curl -fsSL https://raw.githubusercontent.com/AnshKaliya18/test-skill/main/install.sh | bash
 ```
 
-### Windows (PowerShell)
+### Windows (PowerShell 5.1+)
 ```powershell
-irm https://raw.githubusercontent.com/AnshKaliya18/test-skill/main/install.ps1 | iex
+iwr -UseBasicParsing https://raw.githubusercontent.com/AnshKaliya18/test-skill/main/install.ps1 -OutFile $env:TEMP\resume-skill-install.ps1; & $env:TEMP\resume-skill-install.ps1
 ```
+> Avoids the PS5.1 BOM issue with `irm | iex`.
 
 ## Uninstall
 
