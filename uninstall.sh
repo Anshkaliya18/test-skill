@@ -43,6 +43,7 @@ case "$TARGET" in
   all)
     uninstall_from "Claude Code" "$(get_target_path claude)"
     uninstall_from "Codex/agents" "$(get_target_path codex)"
+    uninstall_from "Codex CLI" "$(get_target_path codexcli)"
     ;;
   -h|--help)
     echo "Usage: $0 [claude|codex|agents|codexcli|all] [custom_dir]" >&2
@@ -54,4 +55,4 @@ case "$TARGET" in
     ;;
 esac
 
-echo "Done. Use 'codexcli' or pass a custom dir for Codex CLI-specific locations."
+echo "Done."

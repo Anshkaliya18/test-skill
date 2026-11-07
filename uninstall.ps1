@@ -41,7 +41,8 @@ switch ($Target) {
   "all" {
     Uninstall-From "Claude Code" (Get-TargetPath "claude")
     Uninstall-From "Codex/agents" (Get-TargetPath "codex")
+    Uninstall-From "Codex CLI" (Get-TargetPath "codexcli")
   }
 }
 
-Write-Host "Done. Use -Target codexcli or -Dir <path> for Codex CLI-specific locations."
+Write-Host "Done."

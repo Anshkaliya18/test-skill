@@ -52,8 +52,8 @@ switch ($Target) {
   "all" {
     Install-To "Claude Code" (Get-TargetPath "claude")
     Install-To "Codex/agents" (Get-TargetPath "codex")
-    # Codex CLI path is tool-specific; install to its default too when -Target all? keep explicit to avoid guessing
+    Install-To "Codex CLI" (Get-TargetPath "codexcli")
   }
 }
 
-Write-Host "Done. Use -Target codexcli or -Dir <path> for Codex CLI-specific locations."
+Write-Host "Done."

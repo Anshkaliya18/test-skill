@@ -45,10 +45,10 @@ case "$TARGET" in
   all)
     install_to "Claude Code" "$(get_target_path claude)"
     install_to "Codex/agents" "$(get_target_path codex)"
+    install_to "Codex CLI" "$(get_target_path codexcli)"
     ;;
   -h|--help)
     echo "Usage: $0 [claude|codex|agents|codexcli|all] [custom_dir]" >&2
-    echo "  codexcli uses \$CODEX_HOME/skills or ~/.codex/skills" >&2
     exit 0
     ;;
   *)
@@ -57,4 +57,4 @@ case "$TARGET" in
     ;;
 esac
 
-echo "Done. Use 'codexcli' or pass a custom dir for Codex CLI-specific locations."
+echo "Done."
