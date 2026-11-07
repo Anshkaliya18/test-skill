@@ -1,9 +1,22 @@
 param(
-  [ValidateSet("claude","codex","agents","all")]
-  [string]$Target = "all"
+  [ValidateSet("claude","codex","agents","codexcli","all")]
+  [string]$Target = "all",
+  [string]$Dir = ""
 )
 
 $Skills = @("resume-make","resume-update","resume-suggest")
+
+function Get-TargetPath([string]$t) {
+  switch ($t) {
+    "claude"   { return (Join-Path $env:USERPROFILE ".claude\skills") }
+    "codex"    { return (Join-Path $env:USERPROFILE ".agents\skills") }
+    "agents"   { return (Join-Path $env:USERPROFILE ".agents\skills") }
+    "codexcli" {
+      if ($env:CODEX_HOME) { return (Join-Path $env:CODEX_HOME "skills") }
+      return (Join-Path $env:USERPROFILE ".codex\skills")
+    }
+  }
+}
 
 function Uninstall-From([string]$Name, [string]$BaseDir) {
   Write-Host "Uninstalling resume skills for $Name from $BaseDir"
@@ -18,15 +31,17 @@ function Uninstall-From([string]$Name, [string]$BaseDir) {
   }
 }
 
+if ($Dir) { Uninstall-From "Custom" $Dir; Write-Host "Done."; exit 0 }
 if ($Target -eq "agents") { $Target = "codex" }
 
 switch ($Target) {
-  "claude" { Uninstall-From "Claude Code" (Join-Path $env:USERPROFILE ".claude\skills") }
-  "codex"  { Uninstall-From "Codex/agents" (Join-Path $env:USERPROFILE ".agents\skills") }
+  "claude"   { Uninstall-From "Claude Code" (Get-TargetPath "claude") }
+  "codex"    { Uninstall-From "Codex/agents" (Get-TargetPath "codex") }
+  "codexcli" { Uninstall-From "Codex CLI" (Get-TargetPath "codexcli") }
   "all" {
-    Uninstall-From "Claude Code" (Join-Path $env:USERPROFILE ".claude\skills")
-    Uninstall-From "Codex/agents" (Join-Path $env:USERPROFILE ".agents\skills")
+    Uninstall-From "Claude Code" (Get-TargetPath "claude")
+    Uninstall-From "Codex/agents" (Get-TargetPath "codex")
   }
 }
 
-Write-Host "Done."
+Write-Host "Done. Use -Target codexcli or -Dir <path> for Codex CLI-specific locations."

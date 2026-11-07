@@ -1,10 +1,23 @@
 param(
-  [ValidateSet("claude","codex","agents","all")]
-  [string]$Target = "all"
+  [ValidateSet("claude","codex","agents","codexcli","all")]
+  [string]$Target = "all",
+  [string]$Dir = ""
 )
 
 $RepoBase = "https://raw.githubusercontent.com/AnshKaliya18/test-skill/main/skills"
 $Skills = @("resume-make","resume-update","resume-suggest")
+
+function Get-TargetPath([string]$t) {
+  switch ($t) {
+    "claude"   { return (Join-Path $env:USERPROFILE ".claude\skills") }
+    "codex"    { return (Join-Path $env:USERPROFILE ".agents\skills") }
+    "agents"   { return (Join-Path $env:USERPROFILE ".agents\skills") }
+    "codexcli" {
+      if ($env:CODEX_HOME) { return (Join-Path $env:CODEX_HOME "skills") }
+      return (Join-Path $env:USERPROFILE ".codex\skills")
+    }
+  }
+}
 
 function Install-To([string]$Name, [string]$BaseDir) {
   Write-Host "Installing resume skills for $Name -> $BaseDir"
@@ -24,15 +37,23 @@ function Install-To([string]$Name, [string]$BaseDir) {
   }
 }
 
+if ($Dir) {
+  Install-To "Custom" $Dir
+  Write-Host "Done."
+  exit 0
+}
+
 if ($Target -eq "agents") { $Target = "codex" }
 
 switch ($Target) {
-  "claude" { Install-To "Claude Code" (Join-Path $env:USERPROFILE ".claude\skills") }
-  "codex"  { Install-To "Codex/agents" (Join-Path $env:USERPROFILE ".agents\skills") }
+  "claude"   { Install-To "Claude Code" (Get-TargetPath "claude") }
+  "codex"    { Install-To "Codex/agents" (Get-TargetPath "codex") }
+  "codexcli" { Install-To "Codex CLI" (Get-TargetPath "codexcli") }
   "all" {
-    Install-To "Claude Code" (Join-Path $env:USERPROFILE ".claude\skills")
-    Install-To "Codex/agents" (Join-Path $env:USERPROFILE ".agents\skills")
+    Install-To "Claude Code" (Get-TargetPath "claude")
+    Install-To "Codex/agents" (Get-TargetPath "codex")
+    # Codex CLI path is tool-specific; install to its default too when -Target all? keep explicit to avoid guessing
   }
 }
 
-Write-Host "Done."
+Write-Host "Done. Use -Target codexcli or -Dir <path> for Codex CLI-specific locations."

@@ -1,6 +1,6 @@
 # Resume Skills (Universal Installer)
 
-Beginner-friendly resume skills for Claude Code and Codex/agents-style clients. Same `SKILL.md` files, installed to the right global skills directory.
+Beginner-friendly resume skills for Claude Code, Codex/agents clients, and Codex CLI-style setups. Same `SKILL.md` files, installed to the right skills directory.
 
 ## Skills
 
@@ -10,53 +10,73 @@ Beginner-friendly resume skills for Claude Code and Codex/agents-style clients. 
 | `resume-update` | Update an existing `resume.md` |
 | `resume-suggest` | Suggest improvements for `resume.md` |
 
-## Install (universal)
+## Install
 
-Installs to:
-- **Claude Code**: `~/.claude/skills/` (Windows: `%USERPROFILE%\.claude\skills\`)
-- **Codex/agents**: `~/.agents/skills/` (Windows: `%USERPROFILE%\.agents\skills\`)
+Targets:
+- `claude` → `~/.claude/skills/` (Windows: `%USERPROFILE%\.claude\skills\`)
+- `codex` / `agents` → `~/.agents/skills/` (Windows: `%USERPROFILE%\.agents\skills\`)
+- `codexcli` → `$CODEX_HOME/skills` if set, else `~/.codex/skills/` (Windows: `%CODEX_HOME%\skills` or `%USERPROFILE%\.codex\skills\`)
+- `all` (default) → installs to `claude` + `codex/agents` (use `codexcli` explicitly if your CLI reads `~/.codex/skills`)
 
-Default target is `all` (installs to both). Targets: `claude`, `codex` (or `agents`), `all`.
+You can also pass a custom directory as the second arg / `-Dir`.
 
 ### Windows (PowerShell 5.1+)
 ```powershell
-# Install to both
-iwr -UseBasicParsing https://raw.githubusercontent.com/AnshKaliya18/test-skill/main/install.ps1 -OutFile $env:TEMP\resume-skills.ps1; & $env:TEMP\resume-skills.ps1 -Target all
-```
-Examples:
-```powershell
-# Claude only
-& $env:TEMP\resume-skills.ps1 -Target claude
-# Codex/agents only
-& $env:TEMP\resume-skills.ps1 -Target codex
+# Download installer
+iwr -UseBasicParsing https://raw.githubusercontent.com/AnshKaliya18/test-skill/main/install.ps1 -OutFile $env:TEMP\resume-skills.ps1
+
+# Install to Claude + Codex/agents
+& $env:TEMP\resume-skills.ps1 -Target all
+
+# Codex CLI default (~/.codex/skills or $CODEX_HOME/skills)
+& $env:TEMP\resume-skills.ps1 -Target codexcli
+
+# Custom path (any tool)
+& $env:TEMP\resume-skills.ps1 -Dir "$env:USERPROFILE\.my-tool\skills"
 ```
 
 ### macOS / Linux
 ```bash
-# Install to both
+# Claude + Codex/agents
 curl -fsSL https://raw.githubusercontent.com/AnshKaliya18/test-skill/main/install.sh | bash -s -- all
-```
-Examples:
-```bash
-curl -fsSL https://raw.githubusercontent.com/AnshKaliya18/test-skill/main/install.sh | bash -s -- claude
-curl -fsSL https://raw.githubusercontent.com/AnshKaliya18/test-skill/main/install.sh | bash -s -- codex
+
+# Codex CLI (~/.codex/skills or $CODEX_HOME/skills)
+curl -fsSL https://raw.githubusercontent.com/AnshKaliya18/test-skill/main/install.sh | bash -s -- codexcli
+
+# Custom path
+curl -fsSL https://raw.githubusercontent.com/AnshKaliya18/test-skill/main/install.sh | bash -s -- claude "$HOME/.my-tool/skills"
 ```
 
 ## Uninstall
 
-### Windows
 ```powershell
-iwr -UseBasicParsing https://raw.githubusercontent.com/AnshKaliya18/test-skill/main/uninstall.ps1 -OutFile $env:TEMP\resume-skills-uninstall.ps1; & $env:TEMP\resume-skills-uninstall.ps1 -Target all
+iwr -UseBasicParsing https://raw.githubusercontent.com/AnshKaliya18/test-skill/main/uninstall.ps1 -OutFile $env:TEMP\resume-skills-uninstall.ps1
+& $env:TEMP\resume-skills-uninstall.ps1 -Target all
+& $env:TEMP\resume-skills-uninstall.ps1 -Target codexcli
 ```
 
-### macOS / Linux
 ```bash
 curl -fsSL https://raw.githubusercontent.com/AnshKaliya18/test-skill/main/uninstall.sh | bash -s -- all
+curl -fsSL https://raw.githubusercontent.com/AnshKaliya18/test-skill/main/uninstall.sh | bash -s -- codexcli
 ```
+
+## Codex CLI architecture
+
+```text
+Repo (GitHub)                          Your machine (global)
+skills/<name>/SKILL.md  --download-->  $CODEX_HOME/skills/<name>/SKILL.md
+                                       or ~/.codex/skills/<name>/SKILL.md
+                                       or custom via -Dir/2nd arg
+```
+
+- **Source of truth:** `skills/` in this repo (installed by scripts).
+- **Skill unit:** `resume-*/SKILL.md` with frontmatter (`name`, `description`, etc.) + instructions.
+- **Codex CLI path varies by tool/version**: some read `~/.codex/skills`, some use `$CODEX_HOME`, some use `.agents/skills`. Use `-Target codexcli` for the common default, or `-Dir` for your exact CLI skills directory.
+- **No code changes needed** to the skills themselves; only the install location changes.
 
 ## Usage
 
-After install, ask your agent to use the skill, e.g.:
+After install, ask your agent/CLI to use the skill, e.g.:
 - "Use the resume-make skill to create my resume"
 - "Use resume-update skill to add my new job"
 - "Use resume-suggest skill to review my resume"
@@ -65,20 +85,18 @@ After install, ask your agent to use the skill, e.g.:
 
 ```text
 test-skill/
-├── skills/                 # distributable skills (downloaded by installers)
+├── skills/                 # distributable (source of truth)
 │   ├── resume-make/SKILL.md
 │   ├── resume-update/SKILL.md
 │   └── resume-suggest/SKILL.md
-├── .claude/skills/         # local project copy (for testing)
-├── install.ps1             # universal installer (claude/codex/all)
-├── install.sh
-├── uninstall.ps1
-├── uninstall.sh
+├── .claude/skills/         # local project test copy
+├── install.ps1 / install.sh
+├── uninstall.ps1 / uninstall.sh
 └── README.md
 ```
 
 ## Notes
-- Windows scripts use `-UseBasicParsing` and are saved without BOM for PowerShell 5.1 compatibility.
-- If your Codex client uses a different skills path (e.g. `~/.codex/skills`), change the target mapping in the scripts.
-- `.agents/skills/` in this repo (if present) is for local testing only; `skills/` is the source of truth for installs.
-- Repo: https://github.com/AnshKaliya18/test-skill
+- PS1 scripts are ASCII/no-BOM and use `-UseBasicParsing` for PowerShell 5.1.
+- If your Codex CLI expects a different layout (manifest, command registration, etc.), tell me the CLI name/version and I’ll adapt the packaging.
+
+Repo: https://github.com/AnshKaliya18/test-skill

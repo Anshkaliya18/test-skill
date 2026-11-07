@@ -2,7 +2,19 @@
 set -euo pipefail
 
 TARGET="${1:-all}"
+DIR_OVERRIDE="${2:-}"
 SKILLS=(resume-make resume-update resume-suggest)
+
+get_target_path() {
+  case "$1" in
+    claude) echo "$HOME/.claude/skills" ;;
+    codex|agents) echo "$HOME/.agents/skills" ;;
+    codexcli)
+      if [ -n "${CODEX_HOME:-}" ]; then echo "$CODEX_HOME/skills"; else echo "$HOME/.codex/skills"; fi
+      ;;
+    *) return 1 ;;
+  esac
+}
 
 uninstall_from() {
   local name="$1"
@@ -18,21 +30,28 @@ uninstall_from() {
   done
 }
 
+if [ -n "$DIR_OVERRIDE" ]; then
+  uninstall_from "Custom" "$DIR_OVERRIDE"
+  echo "Done."
+  exit 0
+fi
+
 case "$TARGET" in
-  claude)
-    uninstall_from "Claude Code" "$HOME/.claude/skills"
-    ;;
-  codex|agents)
-    uninstall_from "Codex/agents" "$HOME/.agents/skills"
-    ;;
+  claude) uninstall_from "Claude Code" "$(get_target_path claude)" ;;
+  codex|agents) uninstall_from "Codex/agents" "$(get_target_path codex)" ;;
+  codexcli) uninstall_from "Codex CLI" "$(get_target_path codexcli)" ;;
   all)
-    uninstall_from "Claude Code" "$HOME/.claude/skills"
-    uninstall_from "Codex/agents" "$HOME/.agents/skills"
+    uninstall_from "Claude Code" "$(get_target_path claude)"
+    uninstall_from "Codex/agents" "$(get_target_path codex)"
+    ;;
+  -h|--help)
+    echo "Usage: $0 [claude|codex|agents|codexcli|all] [custom_dir]" >&2
+    exit 0
     ;;
   *)
-    echo "Usage: $0 [claude|codex|agents|all]" >&2
+    echo "Usage: $0 [claude|codex|agents|codexcli|all] [custom_dir]" >&2
     exit 1
     ;;
 esac
 
-echo "Done."
+echo "Done. Use 'codexcli' or pass a custom dir for Codex CLI-specific locations."
