@@ -12,18 +12,37 @@ Beginner-friendly resume skills for Claude Code, packaged like small skills (Hac
 
 ## Install (one command, global)
 
-Installs to `~/.claude/skills/` (or `%USERPROFILE%\.claude\skills\`) so Claude Code can load them globally.
+Installs to Claude (`~/.claude/skills/`) and Codex/agents (`~/.agents/skills/`) by default.
 
-### macOS / Linux
-```bash
-curl -fsSL https://raw.githubusercontent.com/AnshKaliya18/test-skill/main/install.sh | bash
-```
+### Universal (recommended)
 
-### Windows (PowerShell 5.1+)
+**Windows (PowerShell 5.1+)**
 ```powershell
-iwr -UseBasicParsing https://raw.githubusercontent.com/AnshKaliya18/test-skill/main/install.ps1 -OutFile $env:TEMP\resume-skill-install.ps1; & $env:TEMP\resume-skill-install.ps1
+iwr -UseBasicParsing https://raw.githubusercontent.com/AnshKaliya18/test-skill/main/install-universal.ps1 -OutFile $env:TEMP\resume-skills.ps1; & $env:TEMP\resume-skills.ps1 -Target all
 ```
-> Avoids the PS5.1 BOM issue with `irm | iex`.
+
+**macOS / Linux**
+```bash
+curl -fsSL https://raw.githubusercontent.com/AnshKaliya18/test-skill/main/install-universal.sh | bash -s -- all
+```
+
+Targets: `claude`, `codex` (or `agents`), `all` (default).
+
+### Claude-only (legacy)
+- Windows: `iwr -UseBasicParsing https://raw.githubusercontent.com/AnshKaliya18/test-skill/main/install.ps1 -OutFile $env:TEMP\resume-skill-install.ps1; & $env:TEMP\resume-skill-install.ps1`
+- macOS/Linux: `curl -fsSL https://raw.githubusercontent.com/AnshKaliya18/test-skill/main/install.sh | bash`
+
+## Uninstall
+
+**Windows**
+```powershell
+iwr -UseBasicParsing https://raw.githubusercontent.com/AnshKaliya18/test-skill/main/uninstall-universal.ps1 -OutFile $env:TEMP\resume-skills-uninstall.ps1; & $env:TEMP\resume-skills-uninstall.ps1 -Target all
+```
+
+**macOS / Linux**
+```bash
+curl -fsSL https://raw.githubusercontent.com/AnshKaliya18/test-skill/main/uninstall-universal.sh | bash -s -- all
+```
 
 ## Uninstall
 
