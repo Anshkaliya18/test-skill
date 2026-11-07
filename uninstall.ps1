@@ -1,15 +1,15 @@
-﻿$TargetDir = "$env:USERPROFILE\.claude\commands"
+﻿$TargetDir = "$env:USERPROFILE\.claude\skills"
 
-Write-Host "Uninstalling Claude Code resume commands from $TargetDir..."
+Write-Host "Uninstalling Claude Code resume skills from $TargetDir..."
 
-@("resume-make.md", "resume-update.md", "resume-suggest.md") | ForEach-Object {
+@("resume-make", "resume-update", "resume-suggest") | ForEach-Object {
   $path = Join-Path $TargetDir $_
   if (Test-Path $path) {
-    Remove-Item $path -Force
+    Remove-Item $path -Recurse -Force
     Write-Host "  - Removed $_"
   } else {
     Write-Host "  - Skipped $_ (not found)"
   }
 }
 
-Write-Host "Done! Resume commands have been uninstalled."
+Write-Host "Done! Resume skills have been uninstalled."
