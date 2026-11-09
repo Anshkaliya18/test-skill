@@ -13,6 +13,11 @@ get_target_path() {
     codexcli)
       if [ -n "${CODEX_HOME:-}" ]; then echo "$CODEX_HOME/skills"; else echo "$HOME/.codex/skills"; fi
       ;;
+    opencode)
+      if [ -n "${APPDATA:-}" ]; then echo "$APPDATA/opencode/skills"; else echo "$HOME/.config/opencode/skills"; fi
+      ;;
+    kilo) echo "$HOME/.config/kilo/skills" ;;
+    qwen) echo "$HOME/.qwen/skills" ;;
     *) return 1 ;;
   esac
 }
@@ -42,17 +47,23 @@ case "$TARGET" in
   claude) install_to "Claude Code" "$(get_target_path claude)" ;;
   codex|agents) install_to "Codex/agents" "$(get_target_path codex)" ;;
   codexcli) install_to "Codex CLI" "$(get_target_path codexcli)" ;;
+  opencode) install_to "OpenCode" "$(get_target_path opencode)" ;;
+  kilo) install_to "Kilo" "$(get_target_path kilo)" ;;
+  qwen) install_to "Qwen" "$(get_target_path qwen)" ;;
   all)
     install_to "Claude Code" "$(get_target_path claude)"
     install_to "Codex/agents" "$(get_target_path codex)"
     install_to "Codex CLI" "$(get_target_path codexcli)"
+    install_to "OpenCode" "$(get_target_path opencode)"
+    install_to "Kilo" "$(get_target_path kilo)"
+    install_to "Qwen" "$(get_target_path qwen)"
     ;;
   -h|--help)
-    echo "Usage: $0 [claude|codex|agents|codexcli|all] [custom_dir]" >&2
+    echo "Usage: $0 [claude|codex|agents|codexcli|opencode|kilo|qwen|all] [custom_dir]" >&2
     exit 0
     ;;
   *)
-    echo "Usage: $0 [claude|codex|agents|codexcli|all] [custom_dir]" >&2
+    echo "Usage: $0 [claude|codex|agents|codexcli|opencode|kilo|qwen|all] [custom_dir]" >&2
     exit 1
     ;;
 esac
