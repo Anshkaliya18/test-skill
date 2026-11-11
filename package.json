@@ -1,0 +1,26 @@
+﻿{
+  "name": "@anshkaliya18/resume-skills",
+  "version": "1.0.0",
+  "description": "Universal resume skills for Claude Code, Codex, OpenCode, Kilo, Qwen, and compatible agents",
+  "repository": "https://github.com/AnshKaliya18/test-skill",
+  "license": "MIT",
+  "files": [
+    "skills/"
+  ],
+  "scripts": {
+    "postinstall": "node scripts/install-skills.js"
+  },
+  "keywords": [
+    "skills",
+    "claude-code",
+    "codex",
+    "opencode",
+    "kilo",
+    "qwen",
+    "resume",
+    "ai-agent"
+  ],
+  "engines": {
+    "node": ">=18"
+  }
+}

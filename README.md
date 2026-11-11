@@ -2,8 +2,9 @@
 
 Beginner-friendly resume skills for **Claude Code**, **Codex/agents**, **Codex CLI**, **OpenCode**, **Kilo**, **Qwen**, and compatible agents. Same `SKILL.md` files, installed to the right global skills directory.
 
-## One-line install (all agents)
+## Install Methods
 
+### 1. Direct (one-line, no npm needed)
 **Windows (PowerShell 5.1+)**
 ```powershell
 iwr -UseBasicParsing https://raw.githubusercontent.com/AnshKaliya18/test-skill/main/install.ps1 -OutFile $env:TEMP\resume-skills.ps1; & $env:TEMP\resume-skills.ps1 -Target all
@@ -14,7 +15,19 @@ iwr -UseBasicParsing https://raw.githubusercontent.com/AnshKaliya18/test-skill/m
 curl -fsSL https://raw.githubusercontent.com/AnshKaliya18/test-skill/main/install.sh | bash -s -- all
 ```
 
-## One-line uninstall (all agents)
+### 2. npm package (global install)
+```bash
+npm i -g @anshkaliya18/resume-skills
+```
+Runs postinstall script to install skills to all agent global directories.
+
+### 3. npx skills (via skills.sh registry)
+```bash
+npx skills add AnshKaliya18/test-skill
+```
+Installs via skills.sh registry to compatible agent directories.
+
+## Uninstall (all agents)
 
 **Windows (PowerShell 5.1+)**
 ```powershell
@@ -26,7 +39,7 @@ iwr -UseBasicParsing https://raw.githubusercontent.com/AnshKaliya18/test-skill/m
 curl -fsSL https://raw.githubusercontent.com/AnshKaliya18/test-skill/main/uninstall.sh | bash -s -- all
 ```
 
-## Targets
+## Targets (for direct installer)
 
 | Target | Installs to |
 |---|---|
@@ -36,29 +49,8 @@ curl -fsSL https://raw.githubusercontent.com/AnshKaliya18/test-skill/main/uninst
 | `opencode` | `~/.config/opencode/skills/` (Win: `%APPDATA%\opencode\skills\`) |
 | `kilo` | `~/.config/kilo/skills/` (Win: `%USERPROFILE%\.config\kilo\skills\`) |
 | `qwen` | `~/.qwen/skills/` (Win: `%USERPROFILE%\.qwen\skills\`) |
-| `all` (default) | Installs/uninstalls **all six** above |
+| `all` (default) | **All six above** |
 | custom dir | `-Dir <path>` (PS1) or 2nd arg (bash) |
-
-## Examples
-
-```powershell
-# Specific targets
-& $env:TEMP\resume-skills.ps1 -Target claude
-& $env:TEMP\resume-skills.ps1 -Target opencode
-& $env:TEMP\resume-skills.ps1 -Target kilo
-& $env:TEMP\resume-skills.ps1 -Target qwen
-
-# Custom path (any tool)
-& $env:TEMP\resume-skills.ps1 -Dir "$env:USERPROFILE\.my-tool\skills"
-```
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/AnshKaliya18/test-skill/main/install.sh | bash -s -- claude
-curl -fsSL https://raw.githubusercontent.com/AnshKaliya18/test-skill/main/install.sh | bash -s -- opencode
-curl -fsSL https://raw.githubusercontent.com/AnshKaliya18/test-skill/main/install.sh | bash -s -- kilo
-curl -fsSL https://raw.githubusercontent.com/AnshKaliya18/test-skill/main/install.sh | bash -s -- qwen
-curl -fsSL https://raw.githubusercontent.com/AnshKaliya18/test-skill/main/install.sh | bash -s -- claude "$HOME/.my-tool/skills"
-```
 
 ## Skills
 
@@ -71,7 +63,7 @@ curl -fsSL https://raw.githubusercontent.com/AnshKaliya18/test-skill/main/instal
 ## Architecture
 
 ```text
-Repo (GitHub, source of truth)        Global install targets (-Target all)
+Repo (GitHub, source of truth)        Global install targets
 skills/<name>/SKILL.md  ───────────►  ~/.claude/skills/<name>/SKILL.md
                                ├────►  ~/.agents/skills/<name>/SKILL.md
                                ├────►  ~/.codex/skills/<name>/SKILL.md
@@ -81,24 +73,25 @@ skills/<name>/SKILL.md  ───────────►  ~/.claude/skills/<
 ```
 
 - Installers download from `main/skills/*/SKILL.md` and copy to global dirs.
-- `skills/` is the distributable source of truth. `.claude/skills/` and `.agents/skills/` in this repo are for local testing.
+- `skills/` is the **only** source of truth in the repo.
+- No project-local skill directories needed — global install works everywhere.
 
-## Project-local testing (optional)
+## Repo Structure
 
-Add project-local skill dirs if you want agents to auto-discover skills when opening this repo:
-
-```bash
-# OpenCode
-mkdir -p .opencode/skills
-cp -r skills/resume-* .opencode/skills/
-
-# Kilo
-mkdir -p .kilo/skills
-cp -r skills/resume-* .kilo/skills/
-
-# Qwen
-mkdir -p .qwen/skills
-cp -r skills/resume-* .qwen/skills/
+```text
+test-skill/
+├── skills/                 # distributable (source of truth)
+│   ├── resume-make/SKILL.md
+│   ├── resume-update/SKILL.md
+│   └── resume-suggest/SKILL.md
+├── scripts/
+│   └── install-skills.js   # npm postinstall script
+├── install.ps1             # universal installer
+├── install.sh
+├── uninstall.ps1
+├── uninstall.sh
+├── package.json            # npm package config
+└── README.md
 ```
 
 ## Notes
@@ -107,3 +100,4 @@ cp -r skills/resume-* .qwen/skills/
 - If your agent uses a different path, use `-Dir` / custom dir argument.
 
 Repo: https://github.com/AnshKaliya18/test-skill
+Package: npm i -g @anshkaliya18/resume-skills (after publish)
