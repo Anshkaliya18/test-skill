@@ -1,8 +1,11 @@
-﻿{
-  "name": "@anshkaliya18/resume-skills",
+{
+  "name": "@anshkaliya/resume-skills",
   "version": "1.0.0",
   "description": "Universal resume skills for Claude Code, Codex, OpenCode, Kilo, Qwen, and compatible agents",
-  "repository": "https://github.com/AnshKaliya18/test-skill",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AnshKaliya18/test-skill.git"
+  },
   "license": "MIT",
   "files": [
     "skills/"
