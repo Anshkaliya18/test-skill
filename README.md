@@ -1,10 +1,21 @@
 # Resume Skills (Universal Installer)
 
-Beginner-friendly resume skills for **Claude Code**, **Codex/agents**, **Codex CLI**, **OpenCode**, **Kilo**, **Qwen**, and compatible agents. Same `SKILL.md` files, installed to the right global skills directory.
+Beginner-friendly resume skills for **Claude Code**, **Codex/agents**, **Codex CLI**, **OpenCode**, **Kilo**, **Qwen**, and compatible agents.
 
-## Install Methods
+## Install
 
-### 1. Direct (one-line, no npm needed)
+### npm package (recommended for projects)
+Install the package in your project, then run the installer explicitly (no automatic postinstall):
+
+```bash
+npm install @anshkaliya/resume-skills
+node node_modules/@anshkaliya/resume-skills/scripts/install-skills.js
+```
+
+- Default: installs skills into the **current project** (`./.claude/skills`, `./.agents/skills`, `./.codex/skills`, `./.opencode/skills`, `./.kilo/skills`, `./.qwen/skills`)
+- Global (user home): `node node_modules/@anshkaliya/resume-skills/scripts/install-skills.js --global`
+
+### Direct (one-line, no npm needed)
 **Windows (PowerShell 5.1+)**
 ```powershell
 iwr -UseBasicParsing https://raw.githubusercontent.com/AnshKaliya18/test-skill/main/install.ps1 -OutFile $env:TEMP\resume-skills.ps1; & $env:TEMP\resume-skills.ps1 -Target all
@@ -15,19 +26,12 @@ iwr -UseBasicParsing https://raw.githubusercontent.com/AnshKaliya18/test-skill/m
 curl -fsSL https://raw.githubusercontent.com/AnshKaliya18/test-skill/main/install.sh | bash -s -- all
 ```
 
-### 2. npm package (global install)
-```bash
-npm i -g @anshkaliya18/resume-skills
-```
-Runs postinstall script to install skills to all agent global directories.
-
-### 3. npx skills (via skills.sh registry)
+### npx skills (via skills.sh registry)
 ```bash
 npx skills add AnshKaliya18/test-skill
 ```
-Installs via skills.sh registry to compatible agent directories.
 
-## Uninstall (all agents)
+## Uninstall (global/direct installer targets)
 
 **Windows (PowerShell 5.1+)**
 ```powershell
@@ -39,19 +43,6 @@ iwr -UseBasicParsing https://raw.githubusercontent.com/AnshKaliya18/test-skill/m
 curl -fsSL https://raw.githubusercontent.com/AnshKaliya18/test-skill/main/uninstall.sh | bash -s -- all
 ```
 
-## Targets (for direct installer)
-
-| Target | Installs to |
-|---|---|
-| `claude` | `~/.claude/skills/` (Win: `%USERPROFILE%\.claude\skills\`) |
-| `codex` / `agents` | `~/.agents/skills/` (Win: `%USERPROFILE%\.agents\skills\`) |
-| `codexcli` | `$CODEX_HOME/skills` or `~/.codex/skills/` (Win: `%CODEX_HOME%\skills` or `%USERPROFILE%\.codex\skills\`) |
-| `opencode` | `~/.config/opencode/skills/` (Win: `%APPDATA%\opencode\skills\`) |
-| `kilo` | `~/.config/kilo/skills/` (Win: `%USERPROFILE%\.config\kilo\skills\`) |
-| `qwen` | `~/.qwen/skills/` (Win: `%USERPROFILE%\.qwen\skills\`) |
-| `all` (default) | **All six above** |
-| custom dir | `-Dir <path>` (PS1) or 2nd arg (bash) |
-
 ## Skills
 
 | Skill | What it does |
@@ -60,44 +51,29 @@ curl -fsSL https://raw.githubusercontent.com/AnshKaliya18/test-skill/main/uninst
 | `resume-update` | Update an existing `resume.md` |
 | `resume-suggest` | Suggest improvements for `resume.md` |
 
-## Architecture
-
-```text
-Repo (GitHub, source of truth)        Global install targets
-skills/<name>/SKILL.md  ───────────►  ~/.claude/skills/<name>/SKILL.md
-                               ├────►  ~/.agents/skills/<name>/SKILL.md
-                               ├────►  ~/.codex/skills/<name>/SKILL.md
-                               ├────►  ~/.config/opencode/skills/<name>/SKILL.md
-                               ├────►  ~/.config/kilo/skills/<name>/SKILL.md
-                               └────►  ~/.qwen/skills/<name>/SKILL.md
-```
-
-- Installers download from `main/skills/*/SKILL.md` and copy to global dirs.
-- `skills/` is the **only** source of truth in the repo.
-- No project-local skill directories needed — global install works everywhere.
-
 ## Repo Structure
 
 ```text
 test-skill/
-├── skills/                 # distributable (source of truth)
+├── skills/                 # source of truth
 │   ├── resume-make/SKILL.md
 │   ├── resume-update/SKILL.md
 │   └── resume-suggest/SKILL.md
 ├── scripts/
-│   └── install-skills.js   # npm postinstall script
-├── install.ps1             # universal installer
+│   └── install-skills.js   # explicit installer (project by default, --global optional)
+├── install.ps1             # direct global/custom installer
 ├── install.sh
 ├── uninstall.ps1
 ├── uninstall.sh
-├── package.json            # npm package config
+├── package.json
 └── README.md
 ```
 
 ## Notes
-- PS1 scripts are ASCII/no-BOM and use `-UseBasicParsing` for PowerShell 5.1.
+- npm installs do **not** run postinstall automatically (no extra install-script permission/approval required).
+- Direct `install.ps1`/`install.sh` scripts install to global agent directories by default (or a custom dir via `-Dir` / 2nd arg).
 - OpenCode also reads `.claude/skills/` and `.agents/skills/` as compat paths.
-- If your agent uses a different path, use `-Dir` / custom dir argument.
+- If your agent uses a different path, copy from `skills/<name>/SKILL.md`.
 
 Repo: https://github.com/AnshKaliya18/test-skill
-Package: npm i -g @anshkaliya18/resume-skills (after publish)
+Package: `npm install @anshkaliya/resume-skills`
