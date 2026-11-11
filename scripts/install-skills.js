@@ -1,6 +1,7 @@
 ﻿import { copyFileSync, mkdirSync } from 'fs';
-import { join, dirname } from 'path';
+import { dirname, join } from 'path';
 import { homedir } from 'os';
+import { fileURLToPath } from 'url';
 
 const skills = ['resume-make', 'resume-update', 'resume-suggest'];
 
@@ -18,7 +19,8 @@ if (process.env.APPDATA) {
   targets.push(join(process.env.APPDATA, 'opencode', 'skills'));
 }
 
-const srcRoot = join(process.cwd(), 'skills');
+const scriptDir = dirname(fileURLToPath(import.meta.url));
+const srcRoot = join(scriptDir, '..', 'skills');
 
 for (const target of targets) {
   for (const skill of skills) {
